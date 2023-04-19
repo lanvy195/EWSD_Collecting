@@ -1,0 +1,218 @@
+﻿@model X.PagedList.PagedList<Topic>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+<div class="container p-3">
+    <div class="row justify-content-end breadcrumb-custom">
+      <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="/Topic">Topic</a></li>
+            <li class="breadcrumb-item active" aria-current="page">List</li>
+        </ol>
+    </nav>
+
+    </div>
+</div>
+<div class="card ">
+  <h5 class="card-header bg-success text-white">List category</h5>
+    <div class="card-body">
+        <div class="Department-element">
+        <form asp-controller="Topic" asp-action="Index" method="get">
+            <div class="input-group">
+                <input type="text" name="Searchtext" class="form-search" placeholder="Search Topic.." />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary" id="Search">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="btn-group-md">
+            <a asp-controller="Topic" asp-action="Create" class="btn btn-success btnCreate"><i class='bx bx-plus'>CREATE</i></a>
+            <a href="#" class="btn btn-danger" id="BtnDeleteAll"> <i class='bx bxs-trash'></i>DELETE ALL</a>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead class="items">
+            <tr>
+                <th><input type="checkbox" id="SelectAll" /></th>
+                <th>ID</th>
+                <th class="name-item">Name</th>
+                <th>Create Day</th>
+                <th>Closure Date</th>
+                <th>Final Closure Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+                @foreach (var item in Model)
+                {
+                    @if (item.ClosureDate > DateTime.Now)
+                    {
+                        <tr id="trow_@item.Id" class="deadline" style="background:#30BE96">
+                            <td class="new-items"><input type="checkbox" id="cbkItem" value="@item.Id" /></td>
+                            <td class="new-items">@i</td>
+                            <td class="name-item">@item.Name</td>
+                            <td class="new-items">@item.CreateDatetime</td>
+                            <td class="new-items">@item.ClosureDate</td>
+                            <td class="new-items">@item.FinalClosureDate</td>
+                            <td class="action">
+                                <div>
+                                    <a class=" pencil" asp-controller="Topic" asp-action="Edit" asp-route-id=@item.Id>
+                                        <i class="bi bi-pencil btn btn-warning"></i>
+                                    </a>
+                                    <a href="#" data-id="@item.Id" class="btnDelete">
+                                        <i class="bi bi-trash3 btn btn-danger"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @if (item.FinalClosureDate > DateTime.Now)
+                        {
+                            <tr id="trow_@item.Id" class="deadline" style="background:#D6FF7F">
+                                <td class="new-items"><input type="checkbox" id="cbkItem" value="@item.Id" /></td>
+                                <td class="new-items">@i</td>
+                                <td class="name-item">@item.Name</td>
+                                <td class="new-items">@item.CreateDatetime</td>
+                                <td class="new-items">@item.ClosureDate</td>
+                                <td class="new-items">@item.FinalClosureDate</td>
+                                <td class="action">
+                                    <div>
+                                        <a class=" pencil" asp-controller="Topic" asp-action="Edit" asp-route-id=@item.Id>
+                                            <i class="bi bi-pencil btn btn-warning"></i>
+                                        </a>
+                                        <a href="#" data-id="@item.Id" class="btnDelete">
+                                            <i class="bi bi-trash3 btn btn-danger"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr id="trow_@item.Id" class="deadline" style="background:#e74c3c">
+                                <td class="new-items"><input type="checkbox" id="cbkItem" value="@item.Id" /></td>
+                                <td class="new-items">@i</td>
+                                <td class="name-item">@item.Name</td>
+                                <td class="new-items">@item.CreateDatetime</td>
+                                <td class="new-items">@item.ClosureDate</td>
+                                <td class="new-items">@item.FinalClosureDate</td>
+                                <td class="action">
+                                    <div>
+                                        <a class=" pencil" asp-controller="Topic" asp-action="Edit" asp-route-id=@item.Id>
+                                            <i class="bi bi-pencil btn btn-warning"></i>
+                                        </a>
+                                        <a href="#" data-id="@item.Id" class="btnDelete">
+                                            <i class="bi bi-trash3 btn btn-danger"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    i++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7">No value!!!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-12">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { Searchtext = ViewBag.Searchtext , page }))
+        </div>
+    </div>
+    </div>
+</div>
+    
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '#BtnDeleteAll', function (e) {
+                e.preventDefault();
+                var str = "";
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
+                var i = 0;
+                checkbox.each(function () {
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                        var _id = $(this).val();
+                        if (i == 0) {
+                            str += _id;
+                        } else {
+                            str += "," + _id;
+                        }
+                        i++;
+                    } else {
+                        checkbox.attr('selected', '');
+                    }
+                });
+                if (str.length > 0) {
+                    var conf = confirm('Do you want to delete all?');
+                    if (conf == true) {
+                        let token = $('input[name="__RequestVerificationToken"]').val();
+                        $.ajax({
+                            url: '/topic/deleteAll',
+                            type: 'POST',
+                            data: {
+                                __RequestVerificationToken: token,
+                                ids: str
+                            },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    location.reload();
+                                } else {
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            $('body').on('change', '#SelectAll', function () {
+                var checkStatus = this.checked;
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
+                checkbox.each(function () {
+                    this.checked = checkStatus;
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                    } else {
+                        checkbox.attr('selected', '');
+                    }
+                });
+            });
+            $('body').on('click', '.btnDelete', function () {
+                var id = $(this).data("id");
+                var conf = confirm('Do you want to delete this topic?');
+                if (conf == true) {
+                    let token = $('input[name="__RequestVerificationToken"]').val();
+                    $.ajax({
+                        url: '/topic/delete',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token,
+                            id: id
+                        },
+                        success: function (rs) {
+                            if (rs.success) {
+                                location.reload();
+                            }
+                            else {
+                                location.reload();
+                            }
+                        }
+                    });
+                };
+            });
+        });
+    </script>
+}

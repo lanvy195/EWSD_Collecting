@@ -1,0 +1,27 @@
+﻿@model View
+@if (@*ViewBag.FinalClosureDate ==*@ true)
+{
+    if (Model == null)
+    {
+        <a class="btn btn-outline-info btnLike" data-id="@ViewBag.IdeaId"><i class='bx bx-like'></i></a>
+        <a class="btn btn-outline-danger btnDislike" data-id="@ViewBag.IdeaId"><i class='bx bx-dislike'></i></a>
+    }
+    else
+    {
+        switch (Model.React)
+        {
+            case -1:
+                <a class="btn btn-outline-info btnLike" data-id="@ViewBag.IdeaId"><i class='bx bx-like'></i></a>
+                <a class="btn btn-danger btnDislike" data-id="@ViewBag.IdeaId"><i class='bx bx-dislike'></i></a>
+                break;
+            case 1:
+                <a class="btn btn-info btnLike" data-id="@ViewBag.IdeaId"><i class='bx bx-like'></i></a>
+                <a class="btn btn-outline-danger btnDislike" data-id="@ViewBag.IdeaId"><i class='bx bx-dislike'></i></a>
+                break;
+            default:
+                <a class="btn btn-outline-info btnLike" data-id="@ViewBag.IdeaId"><i class='bx bx-like'></i></a>
+                <a class="btn btn-outline-danger btnDislike" data-id="@ViewBag.IdeaId"><i class='bx bx-dislike'></i></a>
+                break;
+        }
+    }
+}

@@ -1,0 +1,375 @@
+﻿@using EWSD_Collecting.Models.ViewModel;
+@model StatisticVM;
+@{
+    ViewData["Title"] = "Statistic Page";
+}
+<div class="container">
+    <div class="container p-3">
+        <div class="row justify-content-end">
+            <div class="text-center">
+                <h2>Statistics analysis </h2>
+            </div>
+        </div>
+    </div>
+    <div class="chart">
+        <canvas id="Percentageofideas"></canvas>
+    </div>
+    <div class="chart1">
+        <canvas id="Numberofideas"></canvas>
+        <canvas id="Numberofcontributors"></canvas>
+    </div>
+    <br />
+    <div class="card border-light mb-3">
+        <div class="card-header-statis">Ideas without comment</div>
+        <div class="card-body statistics">
+            <div class="row" style="display:inline-block">
+                <div class="tile_count">
+                    <div class="col-md-12 col-sm-12  tile_stats_count">
+                        <span class="title-count">
+                            <i class="fa fa-user">
+                            </i>
+                            Total Ideas without comment
+                        </span>
+                        <div class="count">@Model.Total_Ideas_without_comment</div>
+                        <span class="count_bottom">
+                            Lastest Update: Now
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="data-content">
+                @if (Model.List_Ideas_without_comment != null && Model.List_Ideas_without_comment.Any())
+                {
+                    var i = 1;
+                    @foreach (var item in Model.List_Ideas_without_comment)
+                    {
+                        @if (i % 2 == 1)
+                        {
+                            <div class="task-box" style="background:#addeff">
+                                <div class="description-task">
+                                    <div class="time">Create at: @String.Format("{0:MMMM dd, yyyy}", item.CreateDatetime)</div>
+                                    <div class="data-title">
+                                        <div class="task-name">@item.Title</div>
+                                        <div class="actor">By @item.ApplicationUser.FirstName</div>
+                                    </div>
+                                    <a class="arrow view-more" href="/Idea/Detail/@item.Id">
+                                        View more
+                                        <i class='bx bx-chevron-right'></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="task-box" style="background:#ffffc7">
+                                <div class="description-task">
+                                    <div class="time">Create at: @String.Format("{0:MMMM dd, yyyy}", item.CreateDatetime)</div>
+                                    <div class="data-title">
+                                        <div class="task-name">@item.Title</div>
+                                        <div class="actor">By @item.ApplicationUser.FirstName</div>
+                                    </div>
+                                    <a class="arrow view-more" href="/Idea/Detail/@item.Id">
+                                        View more
+                                        <i class='bx bx-chevron-right'></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        i++;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row statis-data">
+        <div class="card border-light mb-3 col-md-5 col-sm-12">
+            <div class="card-header-statis">Anonymous's Ideas</div>
+            <div class=" card-body statistics">
+                <div class="row" style="display:inline-block">
+                    <div class="tile_count">
+                        <div class="col-md-12 col-sm-12  tile_stats_count">
+                            <span class="title-count">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                Total Anonymous's Ideas
+                            </span>
+                            <div class="count">@Model.Total_Ideas_ANONYMOUS</div>
+                            <span class="count_bottom">
+                                Lastest Update: Now
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table ano-idea">
+                        <thead class="data-header">
+                            <tr>
+                                <th scope="col">Ideas' Name</th>
+                                <th scope="col">Number of likes</th>
+                                <th scope="col">Number of dislikes</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.List_Ideas_ANONYMOUS)
+                            {
+                                <tr>
+                                    <td class="name-item">@item.Title</td>
+                                    <td class="new-items">@item.Likes</td>
+                                    <td class="new-items">@item.Dislikes</td>
+                                    <td class="action">
+                                        <div>
+                                            <a class="btn read-more" href="/Idea/Detail/@item.Id"><p class="view-button">View</p></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-light mb-3 col-md-5 col-sm-12">
+            <div class="card-header-statis">Anonymous's comment</div>
+            <div class=" card-body statistics">
+                <div class="row" style="display:inline-block">
+                    <div class="tile_count">
+                        <div class="col-md-12 col-sm-12  tile_stats_count">
+                            <span class="title-count">
+                                <i class='bx bxs-chat'></i>
+                                Total Anonymous's comment
+                            </span>
+                            <div class="count">@Model.Total_COMMENT_ANONYMOUS</div>
+                            <span class="count_bottom">
+                                Lastest Update: Now
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table ano-idea">
+                        <thead class="data-header">
+                            <tr>
+                                <th scope="col">Ideas' Name</th>
+                                <th scope="col">Comment</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.List_COMMENT_ANONYMOUS)
+                            {
+                                <tr>
+                                    <td class="name-item">@item.Idea.Title</td>
+                                    <td class="description">@item.Content</td>
+                                    <td class="action">
+                                        <div>
+                                            <a class="btn read-more" href="/Idea/Detail/@item.Idea.Id"><p class="view-button">View</p></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Statistic/Percentageofideas",
+                data: "",
+                contextType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessResult,
+                error: OnError
+            });
+            function OnSuccessResult(data) {
+                var _data = data;
+                var _chartLabels = _data[0];
+                var _charData = _data[1];
+                var barColor = ["red", "green", "yellow", "blue", "brown", "orange", "purple"];
+                new Chart("Percentageofideas", {
+                    type: 'pie',
+                    data: {
+                        labels: _chartLabels,
+                        datasets: [{
+                            label: 'Percentage of ideas',
+                            data: _charData,
+                            //backgroundColor: barColor,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(201, 203, 207, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                                'rgb(153, 102, 255)',
+                                'rgb(201, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Percentage of ideas by each Department'
+                            }
+                        }
+                    }
+                });
+            }
+            function OnError(err) {
+                console.log("Something went wrong!");
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Statistic/Numberofideas",
+                data: "",
+                contextType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessResult,
+                error: OnError
+            });
+            function OnSuccessResult(data) {
+                var _data = data;
+                var _chartLabels = _data[0];
+                var _charData = _data[1];
+                var barColor = ["red", "green", "yellow", "blue", "brown", "orange", "purple"];
+                new Chart("Numberofideas", {
+                    type: 'bar',
+                    data: {
+                        labels: _chartLabels,
+                        datasets: [{
+                            label: 'Number of Ideas',
+                            data: _charData,
+                            //backgroundColor: barColor,
+                            //borderColor: barColor,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(201, 203, 207, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                                'rgb(153, 102, 255)',
+                                'rgb(201, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Number of ideas made by each Department'
+                            }
+                        }
+                    }
+                });
+            }
+            function OnError(err) {
+                console.log("Something went wrong!");
+            }
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Statistic/Numberofcontributors",
+                data: "",
+                contextType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessResult,
+                error: OnError
+            });
+            function OnSuccessResult(data) {
+                var _data = data;
+                var _chartLabels = _data[0];
+                var _charData = _data[1];
+                var barColor = ["red", "green", "yellow", "blue", "brown", "orange", "purple"];
+                new Chart("Numberofcontributors", {
+                    type: 'bar',
+                    data: {
+                        labels: _chartLabels,
+                        datasets: [{
+                            label: 'Number of contributors',
+                            data: _charData,
+                            //backgroundColor: barColor,
+                            //borderColor: barColor,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(201, 203, 207, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                                'rgb(153, 102, 255)',
+                                'rgb(201, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Number of contributors within each Department'
+                            }
+                        }
+                    }
+                });
+            }
+            function OnError(err) {
+                console.log("Something went wrong!");
+            }
+
+        });
+    </script>
+        }

@@ -1,0 +1,25 @@
+﻿@model Topic
+
+<div class="card card-custom">
+  <h5 class="card-header bg-success text-white">List of Ideas</h5>
+  <div class="card-body">
+    <div class="col-12">
+        <dl class="row justify-content-center">
+            <dt class="col-sm-6 text-end">Topic Name:</dt>
+            <dd class="col-sm-6">@Model.Name</dd>
+            <dt class="col-sm-6 text-end">Submission deadline:</dt>
+            <dd class="col-sm-6">@Model.ClosureDate</dd>
+            <dt class="col-sm-6 text-end">Evaluation deadline:</dt>
+            <dd class="col-sm-6">@Model.FinalClosureDate</dd>
+        </dl>
+    </div>
+    <div class="col-12 text-center">
+        <a class="btn btn-dark text-white" asp-controller="Idea" asp-action="Index"><i class='bx bx-arrow-back'></i></a>
+        @if (Model.ClosureDate > DateTime.Now)
+        {
+            <a class="btn btn-success text-white" asp-controller="Idea" asp-action="Create" asp-route-TopicId=@Model.Id><i class="bx bx-plus Idea"></i></a>
+        }
+    </div>
+  </div>
+</div>
+

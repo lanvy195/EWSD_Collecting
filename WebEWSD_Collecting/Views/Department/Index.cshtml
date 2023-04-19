@@ -1,0 +1,165 @@
+﻿@model X.PagedList.PagedList<Department>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+<div class="container p-3">
+    <div class="row justify-content-end breadcrumb-custom">
+      <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="/Department">Department</a></li>
+            <li class="breadcrumb-item active" aria-current="page">List</li>
+        </ol>
+    </nav>
+    </div>
+</div>
+<div class="card ">
+  <h5 class="card-header bg-success text-white">List Department</h5>
+    <div class="card-body">
+        <div class="Department-element">
+        <form asp-controller="Department" asp-action="Index" method="get" class="searchform">
+            <div class="input-group">
+                <input type="text" name="Searchtext" class="form-search" placeholder="Search Department.." />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary" id="Search">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="btn-group-md">
+            <a asp-controller="Department" asp-action="Create" class="btn btn-success btnCreate"><i class="bx bx-plus">CREATE</i></a>
+            <a href="#" class="btn btn-danger" id="BtnDeleteAll"> <i class='bx bxs-trash'></i>DELETE ALL</a>
+        </div>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead class="items">
+            <tr>
+                <th><input type="checkbox" id="SelectAll" /></th>
+                <th>ID</th>
+                <th class="name-item">Name</th>
+                <th>Last Update</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+                foreach (var item in Model)
+                {
+                    <tr id="trow_@item.Id">
+                        <td class="new-items"><input type="checkbox" id="cbkItem" value="@item.Id" /></td>
+                        <td class="new-items">@i</td>
+                        <td class="name-item">@item.Name</td>
+                        <td class="new-items">@item.LastUpdate</td>
+                        <td class="action">
+                            <div>
+                                <a class=" pencil" asp-controller="Department" asp-action="Edit" asp-route-id=@item.Id>
+                                    <i class="bi bi-pencil btn btn-warning"></i>
+                                </a>
+                                @*<a asp-controller="Department" asp-action="Delete" asp-route-id=@item.Id>
+                        <i class="bi bi-trash3 btn btn-danger"></i>
+                        </a>*@
+                                <a href="#" data-id="@item.Id" class="btnDelete">
+                                    <i class="bi bi-trash3 btn btn-danger"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">No value!!!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-12">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { Searchtext = ViewBag.Searchtext , page }))
+        </div>
+    </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '#BtnDeleteAll', function (e) {
+                e.preventDefault();
+                var str = "";
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
+                var i = 0;
+                checkbox.each(function () {
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                        var _id = $(this).val();
+                        if (i == 0) {
+                            str += _id;
+                        } else {
+                            str += "," + _id;
+                        }
+                        i++;
+                    } else {
+                        checkbox.attr('selected', '');
+                    }
+                });
+                if (str.length > 0) {
+                    var conf = confirm('Do you want to delete all?');
+                    if (conf == true) {
+                        let token = $('input[name="__RequestVerificationToken"]').val();
+                        $.ajax({
+                            url: '/department/deleteAll',
+                            type: 'POST',
+                            data: {
+                                __RequestVerificationToken: token,
+                                ids: str },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    location.reload();
+                                }
+                                else {
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            $('body').on('change', '#SelectAll', function () {
+                var checkStatus = this.checked;
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
+                checkbox.each(function () {
+                    this.checked = checkStatus;
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                    } else {
+                        checkbox.attr('selected', '');
+                    }
+                });
+            });
+            $('body').on('click', '.btnDelete', function () {
+                var id = $(this).data("id");
+                var conf = confirm('Do you want to delete this department?');
+                if (conf == true) {
+                    let token = $('input[name="__RequestVerificationToken"]').val();
+                    $.ajax({
+                        url: '/department/delete',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token,
+                            id: id },
+                        success: function (rs) {
+                            if (rs.success) {
+                                location.reload();
+                            }
+                            else {
+                                location.reload();
+                            }
+                        }
+                    });
+                };
+            });
+        });
+    </script>
+}

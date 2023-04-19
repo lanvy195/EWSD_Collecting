@@ -1,0 +1,147 @@
+﻿@model X.PagedList.PagedList<ApplicationUser>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+<div class="container p-3">
+    <div class="row justify-content-end breadcrumb-custom">
+      <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="/Account">Account</a></li>
+            <li class="breadcrumb-item active" aria-current="page">List</li>
+        </ol>
+    </nav>
+    </div>
+</div>
+<div class="card ">
+  <h5 class="card-header bg-success text-white">List Account</h5>
+    <div class="card-body">
+        <div class="Category-element">
+        <form asp-controller="Account" asp-action="Index" method="get" class="searchform">
+            <div class="input-group">
+                <input type="text" name="Searchtext" class="form-search" placeholder="Search by name" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary" id="Search">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="btn-group-md">
+            <a asp-controller="Account" asp-action="Upsert" class="btn btn-success btnCreate-account"><i class='bx bx-plus'>CREATE</i></a>
+        </div>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="items">
+            <tr>
+                <th>ID</th>
+                <th class="name-item">Full Name</th>
+                <th>Department</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+                foreach (var item in Model)
+                {
+                    <tr id="trow_@item.Id">
+                        <td class="new-items">@i</td>
+                        <td class="name-item">@item.FirstName @item.LastName</td>
+                        <td class="new-items">@item.Department.Name</td>
+                        <td class="new-items">@item.Email</td>
+                        <td class="new-items">@item.PhoneNumber</td>
+                        <td class="action">
+                            @if (item.isDelete == true)
+                            {
+                                <div>
+                                    <a href="#" data-id="@item.Id" class=" btn btn-outline-danger btnunDelete">
+                                        <i class='bx bx-undo'></i>Restore
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <a class="role" asp-controller="Account" asp-action="Manage" asp-route-userId=@item.Id>
+                                        <i class="bi bi-person-vcard btn btn-info" title="Edit role"></i>
+                                    </a>
+                                    <a class="pencil" asp-controller="Account" asp-action="Upsert" asp-route-id=@item.Id>
+                                        <i class="bi bi-pencil btn btn-warning" title="Edit information"></i>
+                                    </a>
+                                    <a class="trash btnDelete" href="#" data-id="@item.Id">
+                                        <i class="bi bi-trash3 btn btn-danger" title="Delete"></i>
+                                    </a>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">No value!!!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-12">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { Searchtext = ViewBag.Searchtext , page }))
+        </div>
+    </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnDelete', function () {
+                var id = $(this).data("id");
+                var conf = confirm('Do you want to delete this user?');
+                if (conf == true) {
+                    let token = $('input[name="__RequestVerificationToken"]').val();
+                    $.ajax({
+                        url: '/Account/DeleteAccount',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token,
+                            id: id
+                        },
+                        success: function (rs) {
+                            if (rs.success) {
+                                location.reload();
+                            } else {
+                                location.reload();
+                            }
+                        }
+                    });
+                };
+            });
+            $('body').on('click', '.btnunDelete', function () {
+                var id = $(this).data("id");
+                var conf = confirm('Do you want to restore this user?');
+                if (conf == true) {
+                    let token = $('input[name="__RequestVerificationToken"]').val();
+                    $.ajax({
+                        url: '/Account/DeleteAccount',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token,
+                            id: id
+                        },
+                        success: function (rs) {
+                            if (rs.success) {
+                                location.reload();
+                            } else {
+                                location.reload();
+                            }
+                        }
+                    });
+                };
+            });
+        });
+    </script>
+}

@@ -1,0 +1,136 @@
+﻿@model Idea
+<div class="card card-custom">
+  <h5 class="card-header  bg-success text-white">Ideas Detail</h5>
+  <div class="card-body">
+    
+<div class="container-ideas">
+    <dl class="row">
+        <dt class="col-sm-4">
+            Full Name
+        </dt>
+        @if (Model.ApplicationUser.isDelete == true)
+        {
+            <dd class="col-sm-6">This account has been blocked</dd>
+        }
+        else
+        {
+            @if (Model.isDisplay == true)
+            {
+                <dd class="col-sm-6">@Model.ApplicationUser.FirstName @Model.ApplicationUser.LastName</dd>
+            }
+            else
+            {
+                <dd class="col-sm-6">Anonymous</dd>
+            }
+        }
+        <dt class="col-sm-4">
+            Topic Name
+        </dt>
+        <dd class="col-sm-6">@Model.Topic.Name</dd>
+        <dt class="col-sm-4">
+            Category Name
+        </dt>
+        <dd class="col-sm-6">@Model.Category.Name</dd>
+        <dt class="col-sm-4">
+            Title
+        </dt>
+        <dd class="col-sm-6">@Model.Title</dd>
+        @if (Model.Description != null)
+        {
+            <dt class="col-sm-4">
+                Description
+            </dt>
+            <dd class="col-sm-6">@Model.Description</dd>
+        }
+        <dt class="col-sm-4">
+            Create Day
+        </dt>
+        <dd class="col-sm-6">@String.Format("{0:MMMM dd, yyyy}", Model.CreateDatetime)</dd>
+        @if (Model.Path != null)
+        {
+            <dt class="col-sm-4">
+                File
+            </dt>
+            <dd class="col-sm-6">
+                <a class="col-sm-8" href="~/@Model.Path" download>Download</a>
+            </dd>
+        }
+        <dt class="col-sm-4">
+            View
+        </dt>
+        <dd class="col-sm-6">@Model.Views</dd>
+        <dt class="col-sm-4">
+            Like
+        </dt>
+        <dd class="col-sm-6">@Model.Likes</dd>
+        <dt class="col-sm-4">
+            Dislike
+        </dt>
+        <dd class="col-sm-6">@Model.Dislikes</dd>
+
+    </dl>
+</div>
+  </div>
+</div>
+
+<div class="button-group">
+    <a class="btn btn-dark text-white backto" asp-controller="Idea" asp-action="View" asp-route-TopicId=@Model.TopicId><i class='bx bx-arrow-back'></i></a>
+    <div class="group-button">
+        @await Component.InvokeAsync("React", Model.Id)
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-sm-6">
+         @await Component.InvokeAsync("CreateComment", Model.Id)
+    </div>
+    <div class="col-sm-6">
+        @await Component.InvokeAsync("ShowComment", Model.Id)
+    </div>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnLike', function () {
+                var id = $(this).data("id");
+                let token = $('input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: '/idea/like',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: token,
+                        id: id
+                    },
+                    success: function (rs) {
+                        if (rs.success) {
+                            location.reload();
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+            $('body').on('click', '.btnDislike', function () {
+                var id = $(this).data("id");
+                let token = $('input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: '/idea/dislike',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: token,
+                        id: id
+                    },
+                    success: function (rs) {
+                        if (rs.success) {
+                            location.reload();
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

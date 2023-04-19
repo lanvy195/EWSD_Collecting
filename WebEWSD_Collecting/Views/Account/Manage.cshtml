@@ -1,0 +1,44 @@
+﻿@using EWSD_Collecting.Models.ViewModel;
+@model List<ManageUserRolesVM>
+@{
+    ViewData["Title"] = "Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container p-3">
+    <div class="row justify-content-end breadcrumb-custom">
+      <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="/Account">Account</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add/Remove Roles for user</li>
+        </ol>
+    </nav>
+    </div>
+</div>
+<div class="card ">
+  <h5 class="card-header bg-success text-white">Manage User Roles</h5>
+    <div class="card-body">
+        <form method="post">
+            <div class="form-control">
+                
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <div class="mb-3">
+                            <input type="hidden" asp-for="@Model[i].RoleId" />
+                            <input type="hidden" asp-for="@Model[i].RoleName" />
+                        <label asp-for="@Model[i].Selected">
+
+                            <input asp-for="@Model[i].Selected" type="checkbox" />
+                                @Model[i].RoleName
+                            </label>
+                        </div>
+                    }
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="button-group">
+                    <input type="submit" value="Update" class="btn btn-warning update"/>
+                    <a asp-controller="Account" asp-action="Index" class="btn btn-dark text-white"><i class='bx bx-arrow-back'></i></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

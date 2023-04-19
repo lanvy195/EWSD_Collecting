@@ -1,0 +1,143 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+    <link rel="stylesheet" href="~/login/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="~/login/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/login/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="~/login/css/style.css">
+
+<div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 order-md-2">
+                <section>
+                    <table class="table">
+                        <tr class="bg-success text-light">
+                            <td colspan="3">Accounts</td>
+                        </tr>
+                        <tr>
+                            <td>Admin</td>
+                            <td id="sample-admin">admin@test.com</td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Manager</td>
+                            <td id="sample-manager">manager@test.com</td>
+                           
+                        </tr>
+                        <tr>
+                            <td>Staff 01</td>
+                            <td id="sample-staff-01">staff01@test.com</td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Staff 02</td>
+                            <td id="sample-staff-02">staff02@test.com</td>
+                            
+                        </tr>
+                        <tr class="bg-success text-light">
+                            <td colspan="3">Password</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="sample-password">abcABC@123</td>
+                            <
+                        </tr>
+                    </table>
+                </section>
+
+        </div>
+
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="mb-4">
+              <h3>Sign In to <strong>System</strong></h3>
+              <p class="mb-4">Welcom to.</p>
+            </div>
+            <form id="account" method="post">
+                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+              <div class="form-group first">
+                <label for="username">Email</label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true">
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+              </div>
+              <div class="form-group last mb-4">
+                <label for="password">Password</label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true">
+                 <span asp-validation-for="Input.Password" class="text-danger"></span>
+              </div>
+
+              <div class="d-flex mb-5 align-items-center">
+                <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                  <input class="form-check-input" asp-for="Input.RememberMe"/>
+                  <div class="control__indicator"></div>
+                </label>
+                <span class="ml-auto"><a  asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="forgot-pass">Register</a></span> 
+              </div>
+
+                            <input type="submit" value="Log In" class="btn btn-sm btn-outline-secondary">
+
+              <span class="d-block text-left my-4 text-muted"> or sign in with</span>
+
+              <div class="social-login">
+                                @{
+                                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                                    {
+                                            <div>
+
+
+                                                <p>
+                                                    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                                                    about setting up this ASP.NET application to support logging in via external services</a>.
+                                                </p>
+                                            </div>
+                                    }
+                                    else
+                                    {
+                                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                                <div>
+                                                    <p>
+                                                    @foreach (var provider in Model.ExternalLogins!)
+
+                                                    { @if (provider.Name == "Facebook")
+                                                        {
+                                                                                                <div class="facebook">
+                                                                <button style="margin-bottom:10px" type="submit" class="btn btn-sm btn-outline-secondary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">  <span> Login with Facebook</span></button>
+                                                                                                </div>
+                                                        }
+                                                        else if (provider.Name == "Google")
+                                                        {
+                                                                                                <div class="google">
+                                                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <span>Login with Google</span></button>
+                                                                </div>
+                                                        }}
+                                                    </p>
+                                                </div>
+                                            </form>
+                                    }
+                                }
+                               
+              </div>
+            </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+@section Scripts {
+                <partial name="_ValidationScriptsPartial" />
+                <script src="~/login/js/main.js"></script>
+}

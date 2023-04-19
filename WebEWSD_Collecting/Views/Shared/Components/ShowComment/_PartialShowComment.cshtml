@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Comment>
+@if (Model != null && Model.Any())
+{
+    foreach (var obj in Model)
+    {
+        <div class="card mb-4">
+            @if (obj.ApplicationUser.isDelete == true)
+            {
+                <div class="user-detail">
+                    <img src="/AccountProfile/acc (0).jpg" class="account-avatar-image" />
+                    <h5 class="user-name">
+                        This account has been blocked
+                    </h5>
+                </div>
+            }
+            else
+            {
+                @if (obj.isDisplay == false)
+                {
+                    <div class="user-detail">
+                        <img src="/AccountProfile/acc (0).jpg" class="account-avatar-image" />
+                        <h5 class="user-name">
+                            Anonymous
+                        </h5>
+                    </div>
+                }
+                else
+                {
+                    <div class="user-detail">
+                        <img src="/@obj.ApplicationUser.Path" class="account-avatar-image" />
+                        <h5 class="user-name">@obj.ApplicationUser.FirstName @obj.ApplicationUser.LastName</h5>
+                    </div>
+                }
+            }
+           
+                <div class="card-body">
+                    <p>@obj.Content</p>
+
+                    <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-row align-items-center">
+                        <img src="/@obj.ApplicationUser.Path" alt="avatar" width="25"
+                        height="25" />
+                        <p class="small mb-0 ms-2">@obj.ApplicationUser.FirstName @obj.ApplicationUser.LastName</p>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <p class="small text-muted mb-0">@String.Format("{0:MMMM dd, yyyy}", obj.CreateDatetime)</p>
+                        <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                    </div>
+                    </div>
+           
+        </div>
+        </div>
+    }
+}
+else
+{
+    <div class="comment mt-4 text-justify">
+        <h4>No Comments</h4>
+    </div>
+}

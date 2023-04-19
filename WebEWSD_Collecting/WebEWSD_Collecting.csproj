@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Admin\**" />
+    <Compile Remove="Areas\Manager\**" />
+    <Compile Remove="Areas\Staff\**" />
+    <Content Remove="Areas\Admin\**" />
+    <Content Remove="Areas\Manager\**" />
+    <Content Remove="Areas\Staff\**" />
+    <EmbeddedResource Remove="Areas\Admin\**" />
+    <EmbeddedResource Remove="Areas\Manager\**" />
+    <EmbeddedResource Remove="Areas\Staff\**" />
+    <None Remove="Areas\Admin\**" />
+    <None Remove="Areas\Manager\**" />
+    <None Remove="Areas\Staff\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.100.3" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EWSD_Collecting.DataAccess\EWSD_Collecting.DataAccess.csproj" />
+    <ProjectReference Include="..\EWSD_Collecting.Utility\EWSD_Collecting.Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="mailssave\" />
+    <Folder Include="Views\Error\" />
+    <Folder Include="wwwroot\AccountProfile\Users\" />
+    <Folder Include="wwwroot\css\Img\" />
+    <Folder Include="wwwroot\file\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Topic\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Topic\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Topic\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Topic\Edit.cshtml" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,346 @@
+﻿@model EWSD_Collecting.Models.ViewModel.HomeVM
+@{
+	ViewData["Title"] = "Home Page";
+}
+	<div class="content">
+
+		<section class="full-width">
+
+			<!-- Left-col-one-start-->
+			<div class="left-col-one">
+				<div class="card card-custom">
+					<h5 class="card-header bg-success text-white ">Most Views</h5>
+						<div class="card-body">
+					@foreach (var item in Model.MostViews)
+					{
+																														<div class="new-block">
+																															<div class="d-flex w-50 justify-content-between">
+																																<div class="account-user">
+																																	<a class="account-avatar">
+										@if (item.isDisplay == true && item.ApplicationUser.isDelete == false)
+										{
+																																																									<img src="@item.ApplicationUser.Path" class="account-avatar-image" />
+										}
+										else
+										{
+																																																									<img src="/AccountProfile/acc (0).jpg" class="account-avatar-image" />
+										}
+																																	</a>
+																																	<div class="account-detail">
+																																		<a href="#" class="username-post">
+											@if (item.ApplicationUser.isDelete == true)
+											{
+																																																										<p class="usersname">This account has been blocked</p>
+											}
+											else
+											{
+												if (item.isDisplay == true)
+												{
+																																																																																	<p class="usersname">@item.ApplicationUser.FirstName @item.ApplicationUser.LastName</p>
+												}
+												else
+												{
+																																																																																	<p class="usersname">Anonymous</p>
+												}
+											}
+																																		</a>
+																																		<small class="date">
+											@{
+												var myMessage = "Hello World";
+												TimeSpan ts = DateTime.Now - item.CreateDatetime;
+												int differenceInDays = ts.Days;
+												if (differenceInDays >= 1)
+												{
+													myMessage = differenceInDays + " days";
+												}
+												else
+												{
+													int differenceInHours = ts.Hours;
+													if (differenceInHours >= 1)
+													{
+														myMessage = differenceInHours + " hours";
+
+													}
+													else
+													{
+														int differenceInMinutes = ts.Minutes;
+														myMessage = differenceInMinutes + " minutes";
+													}
+												}
+											}
+											@myMessage ago
+																																		</small>
+																																	</div>
+																																</div>
+																																<h4 class="header-idea">@item.Title</h4>
+																															</div>
+																															<hr />
+																															<p class="mb-1">@item.Description</p>
+																															<div class="button-list">
+																																<a class="arrow" href="/Idea/Detail/@item.Id">
+																																	Read more
+																																	<i class='bx bx-chevron-right'></i>
+																																</a>
+																																<span class="badge bg-primary rounded-pill"><i class="fa fa-eye"></i>@item.Views</span>
+																																<span class="badge bg-success rounded-pill"><i class="fa fa-thumbs-up"></i>@item.Likes</span>
+																																<span class="badge bg-danger rounded-pill"><i class="fa fa-thumbs-down"></i>@item.Dislikes</span>
+																															</div>
+																															<div class="clear"></div>
+																														</div>
+					}
+					</div>
+				</div>
+				<div class="card card-custom" >
+					<h5 class="card-header bg-success text-white">Lastest Comment</h5>
+						<div class="card-body">
+					@foreach (var item in Model.LatestComments)
+					{
+																													<div class="new-block">
+																														<div class="d-flex w-50 justify-content-between">
+																															<div class="account-user">
+																																<a class="account-avatar">
+										@if (item.isDisplay == true && item.ApplicationUser.isDelete == false)
+										{
+																																																								<img src="@item.ApplicationUser.Path" class="account-avatar-image" />
+										}
+										else
+										{
+																																																								<img src="/AccountProfile/acc (0).jpg" class="account-avatar-image" />
+										}
+																																</a>
+																																<div class="account-detail">
+																																	<a href="#" class="username-post">
+											@if (item.ApplicationUser.isDelete == true)
+											{
+																																																									<p class="usersname">This account has been blocked</p>
+											}
+											else
+											{
+												if (item.isDisplay == true)
+												{
+																																																																																<p class="usersname">@item.ApplicationUser.FirstName @item.ApplicationUser.LastName</p>
+												}
+												else
+												{
+																																																																																<p class="usersname">Anonymous</p>
+												}
+											}
+																																	</a>
+																																	<small class="date">
+											@{
+												var myMessage = "Hello World";
+												TimeSpan ts = DateTime.Now - item.CreateDatetime;
+												int differenceInDays = ts.Days;
+												if (differenceInDays >= 1)
+												{
+													myMessage = differenceInDays + " days";
+												}
+												else
+												{
+													int differenceInHours = ts.Hours;
+													if (differenceInHours >= 1)
+													{
+														myMessage = differenceInHours + " hours";
+
+													}
+													else
+													{
+														int differenceInMinutes = ts.Minutes;
+														myMessage = differenceInMinutes + " minutes";
+													}
+												}
+											}
+											@myMessage ago
+																																	</small>
+																																</div>
+																															</div>
+																															<h4 class="header-idea">@item.Idea.Title</h4>
+																														</div>
+																														<hr />
+																														<p class="mb-1">@item.Content</p>
+																														<div class="button-list">
+																															<a class="arrow" href="/Idea/Detail/@item.Idea.Id">
+																																Read more
+																																<i class='bx bx-chevron-right'></i>
+																															</a>
+																														</div>
+																														<div class="clear"></div>
+																													</div>
+					}
+				</div>
+				</div>
+
+			</div>
+
+			<div class="left-col-one">
+				<div class="card card-custom">
+					<h5 class="card-header bg-success text-white">Most Popular</h5>
+					<div class="card-body">
+					@foreach (var item in Model.MostPopular)
+					{
+																													<div class="new-block">
+																														<div class="d-flex w-50 justify-content-between">
+																															<div class="account-user">
+																																<a class="account-avatar">
+										@if (item.isDisplay == true && item.ApplicationUser.isDelete == false)
+										{
+																																																								<img src="@item.ApplicationUser.Path" class="account-avatar-image" />
+										}
+										else
+										{
+																																																								<img src="/AccountProfile/acc (0).jpg" class="account-avatar-image" />
+										}
+																																</a>
+																																<div class="account-detail">
+																																	<a href="#" class="username-post">
+											@if (item.ApplicationUser.isDelete == true)
+											{
+																																																									<p class="usersname">This account has been blocked</p>
+											}
+											else
+											{
+												if (item.isDisplay == true)
+												{
+																																																																																<p class="usersname">@item.ApplicationUser.FirstName @item.ApplicationUser.LastName</p>
+												}
+												else
+												{
+																																																																																<p class="usersname">Anonymous</p>
+												}
+											}
+																																	</a>
+																																	<small class="date">
+											@{
+												var myMessage = "Hello World";
+												TimeSpan ts = DateTime.Now - item.CreateDatetime;
+												int differenceInDays = ts.Days;
+												if (differenceInDays >= 1)
+												{
+													myMessage = differenceInDays + " days";
+												}
+												else
+												{
+													int differenceInHours = ts.Hours;
+													if (differenceInHours >= 1)
+													{
+														myMessage = differenceInHours + " hours";
+
+													}
+													else
+													{
+														int differenceInMinutes = ts.Minutes;
+														myMessage = differenceInMinutes + " minutes";
+													}
+												}
+											}
+											@myMessage ago
+																																	</small>
+																																</div>
+																															</div>
+																															<h4 class="header-idea-2">@item.Title</h4>
+																														</div>
+																														<hr />
+																														<p class="mb-1">@item.Description</p>
+																														<div class="button-list">
+																															<a class="arrow" href="/Idea/Detail/@item.Id">
+																																Read more<i class='bx bx-chevron-right'></i>
+																															</a>
+																															<span class="badge bg-primary rounded-pill"><i class="fa fa-eye"></i>@item.Views</span>
+																															<span class="badge bg-success rounded-pill"><i class="fa fa-thumbs-up"></i>@item.Likes</span>
+																															<span class="badge bg-danger rounded-pill"><i class="fa fa-thumbs-down"></i>@item.Dislikes</span>
+																														</div>
+																														<div class="clear"></div>
+																													</div>
+					}
+					</div>
+				</div>
+
+				<div class="card card-custom">
+					<h5 class="card-header bg-success text-white">Latest Ideas</h5>
+					<div class="card-body">
+					@foreach (var item in Model.LatestIdeas)
+					{
+																													<div class="new-block">
+																														<div class="d-flex w-50 justify-content-between">
+																															<div class="account-user">
+																																<a class="account-avatar">
+										@if (item.isDisplay == true && item.ApplicationUser.isDelete == false)
+										{
+																																																								<img src="@item.ApplicationUser.Path" class="account-avatar-image" />
+										}
+										else
+										{
+																																																								<img src="/AccountProfile/acc (0).jpg" class="account-avatar-image" />
+										}
+																																</a>
+																																<div class="account-detail">
+																																	<a href="#" class="username-post">
+											@if (item.ApplicationUser.isDelete == true)
+											{
+																																																									<p class="usersname">This account has been blocked</p>
+											}
+											else
+											{
+												if (item.isDisplay == true)
+												{
+																																																																																<p class="usersname">@item.ApplicationUser.FirstName @item.ApplicationUser.LastName</p>
+												}
+												else
+												{
+																																																																																<p class="usersname">Anonymous</p>
+												}
+											}
+																																	</a>
+																																	<small class="date">
+											@{
+												var myMessage = "Hello World";
+												TimeSpan ts = DateTime.Now - item.CreateDatetime;
+												int differenceInDays = ts.Days;
+												if (differenceInDays >= 1)
+												{
+													myMessage = differenceInDays + " days";
+												}
+												else
+												{
+													int differenceInHours = ts.Hours;
+													if (differenceInHours >= 1)
+													{
+														myMessage = differenceInHours + " hours";
+
+													}
+													else
+													{
+														int differenceInMinutes = ts.Minutes;
+														myMessage = differenceInMinutes + " minutes";
+													}
+												}
+											}
+											@myMessage ago
+																																	</small>
+																																</div>
+																															</div>
+																															<h4 class="header-idea-3">@item.Title</h4>
+																														</div>
+																														<hr />
+																														<p class="mb-1">@item.Description</p>
+																														<div class="button-list">
+																															<a class="arrow" href="/Idea/Detail/@item.Id">
+																																Read more<i class='bx bx-chevron-right'></i>
+																															</a>
+																															<span class="badge bg-primary rounded-pill"><i class="fa fa-eye"></i>@item.Views</span>
+																															<span class="badge bg-success rounded-pill"><i class="fa fa-thumbs-up"></i>@item.Likes</span>
+																															<span class="badge bg-danger rounded-pill"><i class="fa fa-thumbs-down"></i>@item.Dislikes</span>
+																														</div>
+																														<div class="clear"></div>
+																													</div>
+					}
+					</div>
+				</div>
+
+
+			</div>
+			<!-- Left-col-two-end-->
+	</div>
+	<!-- Left-col-end-->
+	</section>
+	</div>

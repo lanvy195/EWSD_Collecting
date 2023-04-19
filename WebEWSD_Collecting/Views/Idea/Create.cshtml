@@ -1,0 +1,67 @@
+﻿@using EWSD_Collecting.Models.ViewModel;
+@model IdeaVM
+
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2>Create Ideas</h2>
+            <hr />
+        </div>
+        <input asp-for="idea.TopicId" type="hidden" value="@ViewBag.TopicId" />
+        <div class="mb-3">
+            <label asp-for=idea.Title>Title</label>
+            <input asp-for=idea.Title class="form-control" />
+            <span asp-validation-for=idea.Title class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for=idea.Description>Description</label>
+            <textarea asp-for=idea.Description class="form-control" rows="3"></textarea>
+            <span asp-validation-for=idea.Description class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for=idea.CategoryId>Category</label>
+            <select asp-for=idea.CategoryId asp-items="Model.CategoryList" class="form-select">
+                <option disabled onselect="">-- Select Category</option>
+            </select>
+            <span asp-validation-for=idea.CategoryId class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for=file>File</label>
+            <input asp-for=file class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label>
+                <input type="checkbox" asp-for=idea.isDisplay>
+                Show my name
+            </label>
+        </div>
+        <div class="mb-3">
+            <label>
+                <input type="checkbox" asp-for="idea.isAgree" value="true" />
+                I agree to the <a href="">terms and conditions</a>
+            </label>
+        </div>
+        <div class="button-group">
+            <button type="submit" onclick="return ValidateInput()" class="btn btn-success create">Create</button>
+            <a class="btn btn-dark text-white" asp-controller="Idea" asp-action="View" asp-route-TopicId=@ViewBag.TopicId><i class='bx bx-arrow-back'></i></a>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    @*    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function ValidateInput() {
+            if (document.getElementById("fileUrl").value == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: '<a href="">Please upload file</a>'
+                })
+                return false;
+            }
+            return true;
+        }
+    </script>*@
+}

@@ -1,0 +1,133 @@
+﻿@model X.PagedList.PagedList<Idea>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@{
+    ViewData["Title"] = ViewBag.TopicName;
+}
+@await Component.InvokeAsync("Ideas", ViewBag.TopicId)
+<style>
+    .form-control-borderless {
+    border: none;
+}
+
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+</style>
+<div class="col-4">
+    <form class="card card-sm" asp-controller="Idea" asp-action="View" method="get" class="searchform" style="margin: 10px;">
+                                <div class="card-body row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <i class="fa fa-search h4 text-body"></i>
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input class="form-control form-control-lg form-control-borderless" type="search" name="Searchtext" placeholder="Search Idea..">
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col-auto">
+                                        <button class="btn btn-lg btn-success" type="submit">Search</button>
+                                    </div>
+                                    <!--end of col-->
+                                </div>
+                                 <input type="hidden" name="TopicId" value="@ViewBag.TopicId" />
+                            </form>                        
+</div>
+
+<div class="col-12">
+    <div class="card card-custom">
+        <h5 class="card-header  bg-success text-white">Ideas List</h5>
+        <div class="card-body">
+
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Views</th>
+                    <th>Like</th>
+                    <th>Dislike</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+                    @foreach (var obj in Model)
+                    {
+                        <tr>
+                            <td class="new-items">@obj.Title</td>
+                            <td class="new-items">@obj.Views</td>
+                            <td class="new-items">@obj.Likes</td>
+                            <td class="new-items">@obj.Dislikes</td>
+                            <td class="action">
+                                <a class="btn btn-outline-warning detail" asp-action="Detail" asp-route-id=@obj.Id><i class='bx bx-detail'></i></a>
+                                @await Component.InvokeAsync("React", obj.Id)
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">There are no ideas available at this time!!!</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-12">
+                @Html.PagedListPager(Model, page => Url.Action("View", new {TopicId= ViewBag.TopicId, Searchtext = ViewBag.Searchtext , page }))
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnLike', function () {
+                var id = $(this).data("id");
+                let token = $('input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: '/idea/like',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: token,
+                        id: id
+                    },
+                    success: function (rs) {
+                        if (rs.success) {
+                            location.reload();
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+            $('body').on('click', '.btnDislike', function () {
+                var id = $(this).data("id");
+                let token = $('input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: '/idea/dislike',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: token,
+                        id: id
+                    },
+                    success: function (rs) {
+                        if (rs.success) {
+                            location.reload();
+                        }
+                        else {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

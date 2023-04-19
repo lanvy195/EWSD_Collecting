@@ -1,0 +1,36 @@
+﻿@model Category
+<div class="container p-3">
+    <div class="row justify-content-end breadcrumb-custom">
+      <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Category</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create</li>
+        </ol>
+    </nav>
+
+    </div>
+</div>
+<div class="card ">
+  <h5 class="card-header bg-success text-white">List category</h5>
+    <div class="card-body">
+    <form method="post" asp-action="Edit">
+    <div class="border p-3 mt-4">
+      
+        
+            <label asp-for=Name>Name</label>
+            <input asp-for=Name class="form-control" />
+            <span asp-validation-for=Name class="text-danger"></span>
+        
+        <div class="button-group">
+        <button type="submit" class="btn btn-warning update">Update</button>
+        <a class="btn btn-dark text-white" asp-controller="Category" asp-action="Index"><i class='bx bx-arrow-back'></i></a>
+        </div>
+    </div>
+</form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

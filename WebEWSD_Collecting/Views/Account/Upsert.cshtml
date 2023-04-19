@@ -1,0 +1,102 @@
+﻿@model EWSD_Collecting.Models.ViewModel.AccountVM
+<div class="container p-3">
+    <div class="row justify-content-end breadcrumb-custom">
+      <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="/Account">Account</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@(ViewBag.CreateAccount == true ? "Create" : "Edit")</li>
+        </ol>
+    </nav>
+    </div>
+</div>
+<div class="card ">
+  <h5 class="card-header bg-success text-white">@(ViewBag.CreateAccount == true ? "Create" : "Edit")  Account</h5>
+    <div class="card-body">
+        
+<form method="post" asp-action="Upsert" enctype="multipart/form-data">
+    <input asp-for="account.Id" hidden />
+    <div class="form-group">
+        <div class="row">
+            <div class="col-12">
+                <a class="account-avatar">
+                    <img src="/@Model.account.Path" width="50" class="account-avatar-image" />
+                </a>
+               
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-6">
+                <label asp-for=account.FirstName></label>
+                <input asp-for=account.FirstName class=form-control aria-required="true" />
+                <span asp-validation-for=account.FirstName class="text-danger"></span>
+            </div>
+            <div class="mb-3 col-6">
+                <label asp-for="account.LastName"></label>
+                <input asp-for=account.LastName class="form-control" aria-required="true" />
+                <span asp-validation-for=account.LastName class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-6">
+                <label asp-for=account.Email></label>
+                <input asp-for=account.Email class=form-control aria-required="true" />
+                <span asp-validation-for=account.Email class="text-danger"></span>
+            </div>
+            <div class="mb-3 col-6">
+                <label asp-for=account.PhoneNumber></label>
+                <input asp-for=account.PhoneNumber class=form-control />
+                <span asp-validation-for=account.PhoneNumber class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-6">
+                <label>
+                    <input type="checkbox" asp-for=account.EmailConfirmed>
+                    Email Confirmed
+                </label>
+            </div>
+            <div class="mb-3 col-6">
+                <label>
+                    <input type="checkbox" asp-for=account.PhoneNumberConfirmed>
+                    Phone Confirmed
+                </label>
+            </div>
+            <div class="mb-3 col-6">
+                <label>
+                    <input type="checkbox" asp-for=account.isDelete>
+                    Delete this User
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for=account.DepartmentId>Department</label>
+                <select asp-for=account.DepartmentId asp-items="Model.DepartmentList" class=form-select>
+                    <option disabled onselect=""> -- Select Department --</option>
+                </select>
+                <span asp-validation-for=account.DepartmentId class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for=account.Path>Avatar</label>
+                <input type="file" id="file" name="file" accept="image/*" class="form-control" />
+            </div>
+        </div>
+        <input asp-for="account.Path" type="hidden"/>
+            <div class="button-group">
+                @if (ViewBag.CreateAccount == true)
+                {
+                    <button type="submit" class="btn btn-success create">Create</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-warning update">Update</button>
+                }
+                <a class="btn btn-dark text-white" asp-controller="Account" asp-action="Index"><i class='bx bx-arrow-back'></i></a>
+            </div>
+        </div>
+</form>
+    </div>
+</div>

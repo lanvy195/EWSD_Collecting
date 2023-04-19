@@ -1,0 +1,23 @@
+﻿@model Comment
+@if (ViewBag.FinalClosureDate == true)
+{
+    <div class="Box-cmt">
+        <form class="cmt" asp-controller="Idea" asp-action="Comment" method="post">
+            <input asp-for="IdeaId" type="hidden" value="@ViewBag.IdeaId" />
+            <div>
+                <label asp-for=Content>Leave a comment:</label>
+                <textarea asp-for=Content class="form-control" rows="4"></textarea>
+                <span asp-validation-for=Content class="text-danger"></span>
+            </div>
+            <div class="form-idea">
+                <div class="showname">
+                    <input class="form-check-input" asp-for=isDisplay>
+                    <label class="form-check-label" asp-for=isDisplay>Show name</label>
+                    <div class="cmt-btn">
+                        <button type="submit" class="btn btn-success send"><i class='bx bx-send'></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}

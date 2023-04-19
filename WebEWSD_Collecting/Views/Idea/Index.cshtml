@@ -1,0 +1,143 @@
+﻿@model X.PagedList.PagedList<Topic>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+<div class="container p-3">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h2>Ideas list</h2>
+        </div>
+    </div>
+</div>
+<form asp-controller="Idea" asp-action="Index" method="get" class="searchform">
+    <div class="input-group-1">
+        <input type="text" name="Searchtext" class="form-search" placeholder="Search Ideas.." />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary" id="Search">Search</button>
+        </div>
+    </div>
+</form>
+<div class="explain-box" id="box">
+    <div class="title-box">
+        <strong class="t-box">Noted</strong>
+    </div>
+    <div class="explain-item">
+        <i class='bx bxs-circle' style="color: #D6FF7F" ></i>
+        <p class="explain-text">Close submission deadline</p>
+    </div>
+    <div class="explain-item">
+        <i class='bx bxs-circle' style="color:#e74c3c"></i>
+        <p class="explain-text">Close evaluation deadline</p>
+    </div>
+    <div class="explain-item">
+        <i class='bx bxs-circle' style="color: #30BE96"></i>
+        <p class="explain-text">Still have time to submit</p>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead class="items">
+        <tr>
+            <th class="name-item">Name</th>
+            <th>Submission deadline</th>
+            <th>Evaluation deadline</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+            @foreach (var item in Model)
+            {
+                @if( item.ClosureDate > DateTime.Now){
+                    <tr class="deadline" style="background:#30BE96 ">
+                        <td class="name-item">@item.Name</td>
+                        <td class="new-items">@item.ClosureDate</td>
+                        <td class="new-items">@item.FinalClosureDate</td>
+                        <td class="action">
+                            <div class="eyes">
+                                <a class="views" asp-controller="Idea" asp-action="View" asp-route-TopicId=@item.Id>
+                                    <i class="fa fa-eye btn btn-secondary view-detail">  View</i>
+                                </a>
+                                @if (User.IsInRole("Administrator") || User.IsInRole("QACoordinator") || User.IsInRole("QAManager"))
+                                {
+                                    <a class="download_zip" asp-controller="Idea" asp-action="DownloadZip" asp-route-id=@item.Id>
+                                        <i class="btn btn-info bi bi-file-zip">  Export ZIP</i>
+                                    </a>
+                                    <a class="download_excel" asp-controller="Idea" asp-action="DownloadExcel" asp-route-id=@item.Id>
+                                        <i class="btn btn-success bi bi-filetype-xls">  Export Excel</i>
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @if (item.FinalClosureDate > DateTime.Now)
+                    {
+                        <tr class="deadline" style="background:#D6FF7F">
+                            <td class="name-item">@item.Name</td>
+                            <td class="new-items">@item.ClosureDate</td>
+                            <td class="new-items">@item.FinalClosureDate</td>
+                            <td class="action">
+                                <div class="eyes">
+                                    <a class="views" asp-controller="Idea" asp-action="View" asp-route-TopicId=@item.Id>
+                                        <i class="fa fa-eye btn btn-secondary view-detail">  View</i>
+                                    </a>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("QACoordinator") || User.IsInRole("QAManager"))
+                                    {
+                                        <a class="download_zip" asp-controller="Idea" asp-action="DownloadZip" asp-route-id=@item.Id>
+                                            <i class="btn btn-info bi bi-file-zip">  Export ZIP</i>
+                                        </a>
+                                        <a class="download_excel" asp-controller="Idea" asp-action="DownloadExcel" asp-route-id=@item.Id>
+                                            <i class="btn btn-success bi bi-filetype-xls">  Export Excel</i>
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="deadline" style="background: #e74c3c">
+                            <td class="name-item">@item.Name</td>
+                            <td class="new-items">@item.ClosureDate</td>
+                            <td class="new-items">@item.FinalClosureDate</td>
+                            <td class="action">
+                                <div class="eyes">
+                                    <a class="views" asp-controller="Idea" asp-action="View" asp-route-TopicId=@item.Id>
+                                        <i class="fa fa-eye btn btn-secondary view-detail">  View</i>
+                                    </a>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("QACoordinator") || User.IsInRole("QAManager"))
+                                    {
+                                        <a class="download_zip" asp-controller="Idea" asp-action="DownloadZip" asp-route-id=@item.Id>
+                                            <i class="btn btn-info bi bi-file-zip">  Export ZIP</i>
+                                        </a>
+                                        <a class="download_excel" asp-controller="Idea" asp-action="DownloadExcel" asp-route-id=@item.Id>
+                                            <i class="btn btn-success bi bi-filetype-xls">  Export Excel</i>
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                i++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">There are no topics available at this time!!!</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-12">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { Searchtext = ViewBag.Searchtext , page }))
+    </div>
+</div>
+
+

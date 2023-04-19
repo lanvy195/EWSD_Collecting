@@ -1,0 +1,23 @@
+﻿
+.chart {
+    display: block;
+    box-sizing: border-box;
+    height: 600px;
+    width: 600px;
+    float: inline-end;
+    position: absolute;
+    top: 130px;
+    left: 800px;
+}
+
+
+.chart1 {
+    display: block;
+    box-sizing: border-box;
+    height: 600px;
+    width: 600px;
+    float: inline-end;
+    position: absolute;
+    top: 130px;
+    left: 100px;
+}
